@@ -9,7 +9,6 @@ define(function(require, exports, module) {
      */
     var AniJS = (function(AniJS) {
 
-        //Shorthands
         var ANIJS_DATATAG_NAME = 'data-animate',
             DEFAULT = 'default',
             BODY = 'body',
@@ -24,10 +23,6 @@ define(function(require, exports, module) {
             ANIMATION_END = 'animationend',
             TRANSITION_END = 'transitionend',
             TARGET = 'target';
-
-        /////////////////////////////////////////////////////////
-        // Public API
-        /////////////////////////////////////////////////////////
 
         AniJS = {
 
@@ -122,7 +117,7 @@ define(function(require, exports, module) {
 
                 //We can use this for supply the window load and DomContentLoaded in some context
                 var aniJSEventsNotifier = AniJS.getNotifier('AniJSNotifier');
-                if(aniJSEventsNotifier){
+                if (aniJSEventsNotifier) {
                     aniJSEventsNotifier.dispatchEvent('onRunFinished');
                 }
             },
@@ -276,8 +271,8 @@ define(function(require, exports, module) {
                  * @return
                  */
                 removeAnim: function(e, animationContext) {
-                    if(e.target && e.type){
-                      animationContext.nodeHelper.removeClass(e.target, animationContext.behavior);
+                    if (e.target && e.type) {
+                        animationContext.nodeHelper.removeClass(e.target, animationContext.behavior);
                     }
                 },
                 /**
@@ -287,8 +282,7 @@ define(function(require, exports, module) {
                  * @param {} animationContext
                  * @return
                  */
-                holdAnimClass: function(e, animationContext) {
-                },
+                holdAnimClass: function(e, animationContext) {},
 
                 fireOnce: function(e, animationContext) {
                     animationContext.eventSystem.removeEventListenerHelper(animationContext.eventTarget, animationContext.event.type, animationContext.listener);
@@ -313,22 +307,24 @@ define(function(require, exports, module) {
                  */
                 emit: function(e, ctx, params) {
                     var cevent = params[0] || null,
-                        notifier = "";
-                    if(cevent !== null) {
+                        notifier = '';
+                    if (cevent !== null) {
                         cevent = cevent.split('.');
-                        if(cevent.length > 1) {
+                        if (cevent.length > 1) {
                             notifier = cevent[0];
                             cevent = cevent[1];
                         } else {
-                            notifier = "";
+                            notifier = '';
                             cevent = cevent[0];
                         }
                         var customNotifier = AniJS.getNotifier(notifier) || null;
-                        if(customNotifier !== null)
+                        if (customNotifier !== null) {
                             customNotifier.dispatchEvent(cevent);
+                        }
+
                     }
                     //Run the animation
-                    if(!ctx.hasRunned){
+                    if (!ctx.hasRunned) {
                         ctx.run();
                     }
                 }
@@ -368,13 +364,13 @@ define(function(require, exports, module) {
                 before = item.before;
                 behavior = item.behavior;
 
-                if(after){
+                if (after) {
                     item.after = selfish.Parser.parseDoDefinition(after);
                 }
-                if(before){
+                if (before) {
                     item.before = selfish.Parser.parseDoDefinition(before);
                 }
-                if(behavior){
+                if (behavior) {
                     item.behavior = selfish.Parser.parseDoDefinition(behavior);
                 }
                 selfish._setupElementSentenceAnim(element, item);
@@ -394,8 +390,8 @@ define(function(require, exports, module) {
                 eventTargetList = selfish._eventTargetHelper(element, aniJSParsedSentence),
                 afterFunctionName;
 
-            if(aniJSParsedSentence.after && selfish.Util.beArray(aniJSParsedSentence.after)){
-                afterFunctionName =  aniJSParsedSentence.after[0];
+            if (aniJSParsedSentence.after && selfish.Util.beArray(aniJSParsedSentence.after)) {
+                afterFunctionName = aniJSParsedSentence.after[0];
             }
 
             //Es obligatorio definir de eventTarget ATTR
@@ -414,27 +410,29 @@ define(function(require, exports, module) {
                                 before = selfish._beforeHelper(element, aniJSParsedSentence),
                                 after = selfish._afterHelper(element, aniJSParsedSentence);
                             if (selfish._classNamesWhenAnim !== '') {
-                                if(!selfish.Util.beArray(behavior))
+                                if (!selfish.Util.beArray(behavior)) {
                                     behavior += selfish._classNamesWhenAnim;
+                                }
+
                             }
                             //Creo un nuevo animation context
                             var animationContextConfig = {
-                                behaviorTargetList: behaviorTargetList,
-                                nodeHelper: selfish.NodeHelper,
-                                animationEndEvent: selfish._animationEndEvent,
-                                behavior: behavior,
-                                after: after,
-                                eventSystem: AniJS.EventSystem,
-                                eventTarget: event.currentTarget,
-                                afterFunctionName: afterFunctionName,
-                                dataAniJSOwner: element,
-                                listener: listener,
-                                event: event,
-                                before: before
-                                //TODO: eventSystem should be called directly
-                            },
+                                    behaviorTargetList: behaviorTargetList,
+                                    nodeHelper: selfish.NodeHelper,
+                                    animationEndEvent: selfish._animationEndEvent,
+                                    behavior: behavior,
+                                    after: after,
+                                    eventSystem: AniJS.EventSystem,
+                                    eventTarget: event.currentTarget,
+                                    afterFunctionName: afterFunctionName,
+                                    dataAniJSOwner: element,
+                                    listener: listener,
+                                    event: event,
+                                    before: before
+                                    //TODO: eventSystem should be called directly
+                                },
 
-                            animationContextInstance = new AniJS.AnimationContext(animationContextConfig);
+                                animationContextInstance = new AniJS.AnimationContext(animationContextConfig);
 
                             animationContextInstance.runAll(animationContextConfig);
                         };
@@ -525,25 +523,28 @@ define(function(require, exports, module) {
                 behaviorTarget = aniJSParsedSentence.behaviorTarget;
 
             if (behaviorTarget) {
-                if(!selfish.Util.beArray(behaviorTarget)){
-                    if(behaviorTarget === TARGET && event.currentTarget){
+                if (!selfish.Util.beArray(behaviorTarget)) {
+                    if (behaviorTarget === TARGET && event.currentTarget) {
                         behaviorTargetNodeList = [event.currentTarget];
-                    } else{
+                    } else {
                         //Expression regular remplazar caracteres $ por comas
                         //TODO: Estudiar si este caracter no esta agarrado
                         behaviorTarget = behaviorTarget.split(MULTIPLE_CLASS_SEPARATOR).join(',');
+                        /*jshint maxdepth:5 */
                         try {
                             behaviorTargetNodeList = rootDOMTravelScope.querySelectorAll(behaviorTarget);
                         } catch (e) {
                             behaviorTargetNodeList = [];
                         }
                     }
-                } else{
+                } else {
                     var behaviorObject = this._actionHelper(element, aniJSParsedSentence, behaviorTarget);
-                    if(behaviorObject && selfish.Util.isFunction(behaviorObject[0])){
+                    if (behaviorObject && selfish.Util.isFunction(behaviorObject[0])) {
                         behaviorTargetNodeList = behaviorObject[0]
-                                                    (event,{dataAniJSOwner:element},
-                                                    selfish._paramsHelper(behaviorObject));
+                        (event, {
+                                dataAniJSOwner: element
+                            },
+                            selfish._paramsHelper(behaviorObject));
                     }
                 }
             }
@@ -569,10 +570,12 @@ define(function(require, exports, module) {
          * @return defaultValue
          */
         selfish._afterHelper = function(element, aniJSParsedSentence) {
-            var defaultValue =  aniJSParsedSentence.after;
+            var defaultValue = aniJSParsedSentence.after;
             // return defaultValue;
-            if(!selfish.Util.beArray(defaultValue))
+            if (!selfish.Util.beArray(defaultValue)) {
                 return selfish._callbackHelper(element, aniJSParsedSentence, defaultValue);
+            }
+
             return this._actionHelper(element, aniJSParsedSentence, defaultValue);
         };
 
@@ -584,9 +587,11 @@ define(function(require, exports, module) {
          * @return defaultValue
          */
         selfish._beforeHelper = function(element, aniJSParsedSentence) {
-            var defaultValue =  aniJSParsedSentence.before;
-            if(!selfish.Util.beArray(defaultValue))
+            var defaultValue = aniJSParsedSentence.before;
+            if (!selfish.Util.beArray(defaultValue)) {
                 return selfish._callbackHelper(element, aniJSParsedSentence, defaultValue);
+            }
+
             return this._actionHelper(element, aniJSParsedSentence, defaultValue);
         };
         /**
@@ -601,9 +606,9 @@ define(function(require, exports, module) {
         selfish._actionHelper = function(element, aniJSParsedSentence, action) {
             var defaultValue = action || '',
                 executeFunction;
-            if(selfish.Util.beArray(defaultValue)) {
+            if (selfish.Util.beArray(defaultValue)) {
                 executeFunction = selfish._callbackHelper(element, aniJSParsedSentence, defaultValue[0]);
-                if(executeFunction) {
+                if (executeFunction) {
                     defaultValue[0] = executeFunction;
                 } else {
                     defaultValue = defaultValue.join(' ');
@@ -679,6 +684,7 @@ define(function(require, exports, module) {
 
                     for (i; i < size; i++) {
                         notifierID = notifierIDList[i];
+                        /*jshint maxdepth:5 */
                         if (notifierID && notifierID !== ' ') {
                             //limpiarle los espacios alante y atras (trim)
                             notifierID = notifierID.trim();
@@ -701,10 +707,12 @@ define(function(require, exports, module) {
             return defaultValue;
         };
 
-        selfish._paramsHelper = function(paramsArray){
+        selfish._paramsHelper = function(paramsArray) {
             var arr = [],
                 i = paramsArray.length;
-            while(i-- > 1) arr[i - 1] = paramsArray[i];
+            while (i-- > 1) {
+                arr[i - 1] = paramsArray[i];
+            }
             return arr;
         };
 
@@ -763,7 +771,7 @@ define(function(require, exports, module) {
             //TODO: Delete de element after create this
             var el = document.createElement('fe'),
                 ANIM = 'Animation',
-                animationBrowserDetection = ['animation', 'O'+ANIM, 'Moz'+ANIM, 'webkit'+ANIM];
+                animationBrowserDetection = ['animation', 'O' + ANIM, 'Moz' + ANIM, 'webkit' + ANIM];
 
             for (var i = 0; i < animationBrowserDetection.length; i++) {
                 if (el.style[animationBrowserDetection[i]] !== undefined) {
@@ -828,7 +836,7 @@ define(function(require, exports, module) {
              * @param  {[type]}   behavior [description]
              * @return {[type]}            [description]
              */
-            animationContextInstance.doDefaultAction = function(target, behavior){
+            animationContextInstance.doDefaultAction = function(target, behavior) {
                 var instance = animationContextInstance,
                     nodeHelper = instance.nodeHelper,
                     animationEndEvent = instance.animationEndEvent,
@@ -841,18 +849,18 @@ define(function(require, exports, module) {
                     e.stopPropagation();
                     //remove event
                     instance.eventSystem.removeEventListenerHelper(e.target, e.type, arguments.callee);
-                    if(after){
-                        if(selfish.Util.isFunction(after)){
+                    if (after) {
+                        if (selfish.Util.isFunction(after)) {
                             after(e, animationContextInstance);
-                        } else if(selfish.Util.beArray(after)) {
+                        } else if (selfish.Util.beArray(after)) {
                             after[0](e, animationContextInstance, selfish._paramsHelper(after));
                         }
                     }
                 });
                 // Backguard compatibility
-                if (afterFunctionName !== "holdAnimClass" && afterFunctionName !== "$holdAnimClass") {
+                if (afterFunctionName !== 'holdAnimClass' && afterFunctionName !== '$holdAnimClass') {
                     lastBehavior = target._ajLastBehavior;
-                    if(lastBehavior){
+                    if (lastBehavior) {
                         // removing the animation by default if there are not hold animClass
                         nodeHelper.removeClass(target, lastBehavior);
                     }
@@ -872,15 +880,17 @@ define(function(require, exports, module) {
              * @param  {[type]}   behavior [description]
              * @return {[type]}            [description]
              */
-            animationContextInstance.doFunctionAction = function(target, behavior){
+            animationContextInstance.doFunctionAction = function(target, behavior) {
                 var instance = animationContextInstance,
                     after = instance.after,
-                    e = {target:target};
+                    e = {
+                        target: target
+                    };
                 behavior[0](e, animationContextInstance, selfish._paramsHelper(behavior));
-                if(selfish.Util.isFunction(after)){
+                if (selfish.Util.isFunction(after)) {
                     after(e, animationContextInstance);
                 } else {
-                    if(selfish.Util.beArray(after)) {
+                    if (selfish.Util.beArray(after)) {
                         after[0](e, animationContextInstance, selfish._paramsHelper(after));
                     }
                 }
@@ -922,9 +932,9 @@ define(function(require, exports, module) {
 
                     simpleAnimationContextInstance = new AniJS.AnimationContext(animationContextConfig);
                     if (before) {
-                        if(selfish.Util.isFunction(before)) {
+                        if (selfish.Util.isFunction(before)) {
                             before(event, simpleAnimationContextInstance);
-                        } else if(selfish.Util.beArray(before)) {
+                        } else if (selfish.Util.beArray(before)) {
                             before[0](event, simpleAnimationContextInstance, selfish._paramsHelper(before));
                         }
                     } else {
@@ -943,10 +953,10 @@ define(function(require, exports, module) {
                     behaviorTargetListItem = instance.behaviorTargetList[0];
 
                 animationContextInstance.hasRunned = 1;
-                if(selfish.Util.beArray(behavior)){
+                if (selfish.Util.beArray(behavior)) {
                     instance
                         .doFunctionAction(behaviorTargetListItem, behavior);
-                } else{
+                } else {
                     instance
                         .doDefaultAction(behaviorTargetListItem, behavior);
                 }
@@ -1046,7 +1056,7 @@ define(function(require, exports, module) {
                 if (definitionBody.length > 1) {
                     definitionKey = definitionBody[0].trim();
                     //CSS3 selectors support
-                    if(definitionBody.length > 2){
+                    if (definitionBody.length > 2) {
                         definitionValue = definitionBody.slice(1);
                         definitionValue = definitionValue.join(':');
                         definitionValue = definitionValue.trim();
@@ -1061,16 +1071,17 @@ define(function(require, exports, module) {
                         definitionKey = EVENT_TARGET_KEY;
                     } else {
                         for (var i = BEHAVIOR_RESERVED_WORD.length - 1; i >= 0; i--) {
-                              if(definitionKey === BEHAVIOR_RESERVED_WORD[i]) {
+                            /*jshint maxdepth:5 */
+                            if (definitionKey === BEHAVIOR_RESERVED_WORD[i]) {
                                 definitionKey = BEHAVIOR_KEY[i];
                                 /**
                                  * TODO: This code is deprecated for next version
                                  */
-                                if((definitionKey === 'after' || definitionKey === 'before') && definitionValue[0]!== '$') {
+                                if ((definitionKey === 'after' || definitionKey === 'before') && definitionValue[0] !== '$') {
                                     definitionValue = '$' + definitionValue;
                                 }
                                 definitionValue = this.parseDoDefinition(definitionValue);
-                              }
+                            }
                         }
                     }
                     parsedDefinition.key = definitionKey;
@@ -1089,18 +1100,21 @@ define(function(require, exports, module) {
             parseDoDefinition: function(doDefinition) {
                 var reg = /^\$(\w+)\s*/g,
                     regMatch = reg.exec(doDefinition),
-                    functionName = "",
-                    parametersArray = [], it = 1;
+                    functionName = '',
+                    parametersArray = [],
+                    it = 1;
 
-                if(regMatch !== null) {
+                if (regMatch !== null) {
                     functionName = regMatch[1];
                     doDefinitionArray = doDefinition.split(regMatch[0])[1];
                     doDefinitionArray = doDefinitionArray !== null ? doDefinitionArray.split(PARAMS_SEPARATOR) : [];
                     doDefinition = [];
                     doDefinition[0] = functionName;
                     for (var i = 0; i < doDefinitionArray.length; i++) {
-                        if(doDefinitionArray[i] !== "")
+                        if (doDefinitionArray[i] !== '') {
                             doDefinition[it++] = doDefinitionArray[i].trim();
+                        }
+
                     }
                     return doDefinition;
                 }
@@ -1128,7 +1142,7 @@ define(function(require, exports, module) {
                 }
                 for (var i = 0, len = string.length; i < len; ++i) {
                     if (string[i] && !new RegExp(REGEX_BEGIN + string[i] + REGEX_END).test(elem.className)) {
-                        elem.className = (elem.className === "") ?  string[i] : elem.className.trim() + ' ' + string[i];
+                        elem.className = (elem.className === '') ? string[i] : elem.className.trim() + ' ' + string[i];
                     }
                 }
             },
@@ -1183,7 +1197,7 @@ define(function(require, exports, module) {
              * @since  2014-09-09
              * @return {Boolean}  [description]
              */
-            beArray:function(object){
+            beArray: function(object) {
                 return Array.isArray(object);
             }
         };
@@ -1232,6 +1246,7 @@ define(function(require, exports, module) {
              * @param {} other
              * @return
              */
+            /*jshint maxparams:5 */
             addEventListenerHelper: function(eventTargetItem, event, listener, other) {
                 eventTargetItem.addEventListener(event, listener, false);
             },
@@ -1244,7 +1259,7 @@ define(function(require, exports, module) {
              * @return
              */
             removeEventListenerHelper: function(element, type, listener) {
-                if(element){
+                if (element) {
                     element.removeEventListener(type, listener);
                 }
             },
@@ -1282,11 +1297,11 @@ define(function(require, exports, module) {
              * @param {} element
              * @return
              */
-            purgeAllNodes: function(element){
+            purgeAllNodes: function(element) {
                 //Dame todos los que tengan data-anijs
                 //a cada uno purgue
-                var nodes = element.querySelectorAll("*");
-                    size = nodes.length;
+                var nodes = element.querySelectorAll('*');
+                size = nodes.length;
                 for (var i = size - 1; i >= 0; i--) {
                     this.purgeEventTarget(nodes[i]);
                 }
@@ -1383,7 +1398,7 @@ define(function(require, exports, module) {
              */
             addEventListener: function(type, listener, other) {
                 var instance = this;
-                if (typeof instance._listeners[type] == "undefined") {
+                if (typeof instance._listeners[type] == 'undefined') {
                     instance._listeners[type] = [];
                 }
 
@@ -1399,7 +1414,7 @@ define(function(require, exports, module) {
              */
             dispatchEvent: function(event) {
                 var instance = this;
-                if (typeof event == "string") {
+                if (typeof event == 'string') {
                     event = {
                         type: event
                     };
@@ -1409,7 +1424,7 @@ define(function(require, exports, module) {
                 }
 
                 if (!event.type) { //falsy
-                    throw new Error("Event object missing 'type' property.");
+                    throw new Error('Event object missing "type" property.');
                 }
 
                 if (this._listeners[event.type] instanceof Array) {

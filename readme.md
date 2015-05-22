@@ -1,9 +1,7 @@
-#vote
+#animate
 
-[![Build Status](https://api.travis-ci.org/pandorajs/vote.png?branch=master)](http://travis-ci.org/pandorajs/vote)
-[![Coverage Status](https://coveralls.io/repos/pandorajs/vote/badge.png?branch=master)](https://coveralls.io/r/pandorajs/vote?branch=master)
 
- > 基于投票系统JSONP接口的移动端的投票组件
+ > 以简单的data-animate属性和纯JS方式实现CSS3动画
 
 ##how to demo
 
@@ -15,8 +13,8 @@
 
 ##how to use
 
-1. run `spm install pandora/mvote`
-1. write `require('pandora/mvote/VERSION.NUMBER/mvote')`
+1. run `spm install pandora/animate`
+1. write `require('pandora/mvote/VERSION.NUMBER/animate')`
 
 ##find examples
 
